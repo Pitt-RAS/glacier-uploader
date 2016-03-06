@@ -2,6 +2,8 @@ import boto3
 from botocore.utils import calculate_tree_hash
 
 class GlacierWrapper:
+    """A wrapper for Glacier commands
+    """
 
     def __init__(self, account_id, part_size = 67108864):
         self.account_id = account_id
@@ -23,7 +25,7 @@ class GlacierWrapper:
         content_size = len(content)
         finish = False
         part_range = 'bytes ' + str(part_ind * self.part_size) + '-'
-        if (content_size < self.part_size):
+        if (content_size < self.part_size): # last part
             part_range += str(part_ind * self.part_size + content_size - 1)
             finish = True
         else:

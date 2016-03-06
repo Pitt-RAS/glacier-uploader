@@ -7,18 +7,20 @@ from glacier_wrapper import GlacierWrapper
 
 PART_SIZE = 16777216
 
+# read config
 with open('config.json') as data_file:
     data = json.load(data_file)
-
 account_id = data['account_id']
 vault_name = data['vault_name']
 directory = data['directory']
 exts = data['ext']
 log = open(vault_name + '.log', 'w')
 
+# initialize Glacier wrapper
 glacier = GlacierWrapper(account_id, PART_SIZE)
 glacier.set_vault_name(vault_name)
 
+# find all the files with the allowed extensions
 filenames = [f for f in os.listdir(directory) if f.lower().endswith(tuple(exts))]
 total = len(filenames)
 ind = 1

@@ -1,6 +1,9 @@
 import sys
 
 class ProgressBar:
+    """A simple progress bar on command line
+    reference: http://stackoverflow.com/questions/3160699/python-progress-bar
+    """
 
     def __init__(self, length):
         self.length = length
