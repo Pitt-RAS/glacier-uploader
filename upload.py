@@ -37,14 +37,18 @@ for filename in filenames:
         content = archive.read(PART_SIZE)
         while True:
             progress_bar.advance()
-            if glacier.upload_multipart_part(upload_id, part_ind, content):
-                archive_id = glacier.complete_multipart_upload(upload_id, archive)
-                print(filename + ',' + archive_id, file = log)
-                progress_bar.finish()
+            try:
+                if glacier.upload_multipart_part(upload_id, part_ind, content):
+                    archive_id = glacier.complete_multipart_upload(upload_id, archive)
+                    print(filename + ',' + archive_id, file = log)
+                    progress_bar.finish()
+                    break;
+                else:
+                    content = archive.read(PART_SIZE)
+                    part_ind += 1
+            except TimeoutError as error:
+                print(repr(error) + ' skip file')
                 break;
-            else:
-                content = archive.read(PART_SIZE)
-                part_ind += 1
     archive.close()
     ind += 1
 

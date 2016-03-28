@@ -1,9 +1,12 @@
 import boto3
 from botocore.utils import calculate_tree_hash
+from botocore import exceptions
 
 class GlacierWrapper:
     """A wrapper for Glacier commands
     """
+
+    MAX_RETRY = 3
 
     def __init__(self, account_id, part_size = 67108864):
         self.account_id = account_id
@@ -25,18 +28,28 @@ class GlacierWrapper:
         content_size = len(content)
         finish = False
         part_range = 'bytes ' + str(part_ind * self.part_size) + '-'
-        if (content_size < self.part_size): # last part
+        if content_size < self.part_size: # last part
             part_range += str(part_ind * self.part_size + content_size - 1)
             finish = True
         else:
             part_range += str((part_ind + 1) * self.part_size - 1)
         part_range += '/*'
-        response = self.client.upload_multipart_part(
-            vaultName = self.vault_name,
-            uploadId = upload_id,
-            range = part_range,
-            body = content
-        )
+        retry = 0
+        while retry < self.MAX_RETRY:
+            try:
+                response = self.client.upload_multipart_part(
+                    vaultName = self.vault_name,
+                    uploadId = upload_id,
+                    range = part_range,
+                    body = content
+                )
+            except exceptions.ClientError as e:
+                print(e.response['Error']['Message'] + ' Retry...')
+                retry += 1
+                continue
+            break
+        if retry >= self.MAX_RETRY: # failed
+            raise TimeoutError('Max number of retry.')
         return finish
 
     def complete_multipart_upload(self, upload_id, archive):
