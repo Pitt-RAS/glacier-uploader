@@ -1,5 +1,6 @@
 import json
 import os
+import sys
 from math import ceil
 
 from progress_bar import ProgressBar
@@ -49,6 +50,9 @@ for filename in filenames:
             except TimeoutError as error:
                 print(repr(error) + ' skip file')
                 break;
+            except KeyboardInterrupt:
+                print('\nUser stopped!')
+                sys.exit(0)
     archive.close()
     ind += 1
 
