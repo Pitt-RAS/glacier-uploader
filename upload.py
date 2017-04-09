@@ -18,7 +18,7 @@ directory = data['directory']
 exts = data['ext']
 log = open(vault_name + '.log', 'w')
 
-os.system('grive -f -p ' + directory + '-l ' + vault_name + '_grivesync.log')
+os.system('grive -f -p ' + directory + '-l ' + vault_name + '_grivesync.log' + ' --dry-run')
 '''
 # initialize Glacier wrapper
 glacier = GlacierWrapper(account_id, PART_SIZE)
