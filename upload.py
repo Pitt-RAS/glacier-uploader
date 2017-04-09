@@ -8,6 +8,7 @@ from glacier_wrapper import GlacierWrapper
 
 PART_SIZE = 16777216
 
+
 # read config
 with open('config.json') as data_file:
     data = json.load(data_file)
@@ -17,6 +18,8 @@ directory = data['directory']
 exts = data['ext']
 log = open(vault_name + '.log', 'w')
 
+os.system('grive -f -p ' + directory + '-l ' + vault_name + '_grivesync.log')
+'''
 # initialize Glacier wrapper
 glacier = GlacierWrapper(account_id, PART_SIZE)
 glacier.set_vault_name(vault_name)
@@ -56,4 +59,4 @@ for filename in filenames:
     archive.close()
     ind += 1
 
-log.close()
+log.close()'''

@@ -1,11 +1,8 @@
 {
   "account_id": "put your account ID here",
-  "vault_name": "photo-backup-2009",
-  "directory": "/Users/drxcheng/Desktop/photo backup/2009",
+  "vault_name": "gdrive-ras-backup",
+  "directory": "/home/ubuntu/googledriveras",
   "ext": [
-    "mov",
-    "avi",
-    "3gp",
-    "mp4"
+    "*"
   ]
 }
